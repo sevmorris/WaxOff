@@ -4,6 +4,8 @@
 
 WaxOff prepares your final podcast mix for distribution. It applies EBU R128 loudness normalization, optional phase rotation, and encodes to 24-bit WAV and/or MP3 — ready for upload.
 
+WaxOff assumes your mix is already balanced — it applies a single linear gain adjustment to hit the target loudness without changing dynamics, compression, or relative levels. If your mix sounds right, WaxOff just makes it loud enough.
+
 ## Features
 
 - **Loudness Normalization**: Two-pass EBU R128 with linear gain — no dynamic compression, just transparent level matching
