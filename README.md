@@ -10,6 +10,12 @@ WaxOff assumes your mix is already balanced — it applies a single linear gain 
 
 **[WaxOff v2.1 (DMG)](https://github.com/sevmorris/WaxOff/releases/latest/download/WaxOff-v2.1.dmg)**
 
+**Note:** macOS may block the app on first launch with a malware warning. This is because the app is not notarized with Apple. To fix, run this after mounting the DMG and dragging WaxOff to Applications:
+
+```
+xattr -cr /Applications/WaxOff.app
+```
+
 ## Features
 
 - **Loudness Normalization**: Two-pass EBU R128 with linear gain — no dynamic compression, just transparent level matching
