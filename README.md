@@ -1,8 +1,7 @@
 <p align="center">
-  <img src="assets/icon.png" width="128" alt="WaxOff icon">
+  <img src="assets/header.png" alt="WaxOff">
 </p>
 
-# WaxOff
 
 **Podcast Finalizer for macOS**
 
