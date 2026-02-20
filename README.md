@@ -11,7 +11,7 @@ WaxOff assumes your mix is already balanced — it applies a single linear gain 
 
 ## Design Philosophy
 
-WaxOff is intentionally minimal. It does one thing — finalizes your podcast mix for distribution — and exposes only the controls that matter for that job. Sensible defaults handle the rest. Drop your mix in, hit Process, and upload.
+WaxOff is intentionally minimal. It does one thing — finalizes your podcast mix for distribution — and exposes only the controls that matter for that job. Sensible defaults handle the rest. Drop your mix in, hit Process, and deliver.
 
 ## Download
 
