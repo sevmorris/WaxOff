@@ -1,21 +1,30 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var queue: ProcessingQueue
+    @Environment(ProcessingQueue.self) var queue
 
     var body: some View {
+        @Bindable var queue = queue
+
         Form {
             Section("Audio Processing") {
-                Picker("Target Loudness", selection: $queue.options.targetLUFS) {
-                    Text("-18 LUFS (Podcast Standard)").tag(-18)
-                    Text("-16 LUFS (Louder)").tag(-16)
+                HStack {
+                    Text("Target Loudness")
+                    Spacer()
+                    Text("\(Int(queue.options.targetLUFS)) LUFS")
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
                 }
+                Slider(value: $queue.options.targetLUFS, in: -24...(-14), step: 1)
 
-                Picker("True Peak Limit", selection: $queue.options.truePeak) {
-                    Text("-1.0 dBTP").tag(-1.0)
-                    Text("-1.5 dBTP").tag(-1.5)
-                    Text("-2.0 dBTP").tag(-2.0)
+                HStack {
+                    Text("True Peak Limit")
+                    Spacer()
+                    Text("\(queue.options.truePeakString) dBTP")
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
                 }
+                Slider(value: $queue.options.truePeak, in: -3.0...(-0.1), step: 0.1)
 
                 Toggle("Phase Rotation (150 Hz allpass)", isOn: $queue.options.phaseRotationEnabled)
                     .help("All-pass filter applied before loudness normalization to improve headroom")
@@ -102,5 +111,5 @@ struct FFmpegStatusRow: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(ProcessingQueue())
+        .environment(ProcessingQueue())
 }

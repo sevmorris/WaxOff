@@ -103,7 +103,7 @@ final class ProcessingJob: Identifiable {
     }
 
     func outputFilename(for options: ProcessingOptions) -> String {
-        "\(stemName)-lev-\(options.targetLUFS)LUFS"
+        "\(stemName)-lev-\(options.targetLUFSString)LUFS"
     }
 }
 
@@ -129,7 +129,7 @@ struct ProcessingResult {
         }
 
         lines.append("")
-        lines.append("Target: \(options.targetLUFS) LUFS (-1 dBTP)")
+        lines.append("Target: \(options.targetLUFSString) LUFS (\(options.truePeakString) dBTP)")
         lines.append("Sample rate: \(options.sampleRateDisplay)")
         lines.append("Output: \(options.outputMode.rawValue)")
 

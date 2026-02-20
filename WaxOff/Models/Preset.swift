@@ -54,9 +54,10 @@ struct Preset: Identifiable, Codable, Equatable {
     ]
 }
 
-final class PresetStore: ObservableObject {
-    @Published var presets: [Preset] = []
-    @Published var selectedPresetID: UUID?
+@Observable
+final class PresetStore {
+    var presets: [Preset] = []
+    var selectedPresetID: UUID?
 
     private let userDefaultsKey = "WaxOffUserPresets"
 

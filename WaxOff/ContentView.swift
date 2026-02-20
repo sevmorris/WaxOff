@@ -2,12 +2,14 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ContentView: View {
-    @EnvironmentObject var queue: ProcessingQueue
+    @Environment(ProcessingQueue.self) var queue
     @State private var isTargeted = false
     @State private var showingCompletion = false
     @State private var completionResult: ProcessingResult?
 
     var body: some View {
+        @Bindable var queue = queue
+
         VStack(spacing: 0) {
             OptionsBar()
                 .padding()
@@ -46,8 +48,8 @@ struct ContentView: View {
         } message: { result in
             Text(result.summary)
         }
-        .onReceive(queue.$processingComplete) { complete in
-            if complete {
+        .onChange(of: queue.processingComplete) { _, newValue in
+            if newValue {
                 completionResult = queue.getResult()
                 showingCompletion = true
                 queue.processingComplete = false
@@ -73,9 +75,11 @@ struct ContentView: View {
 }
 
 struct OptionsBar: View {
-    @EnvironmentObject var queue: ProcessingQueue
+    @Environment(ProcessingQueue.self) var queue
 
     var body: some View {
+        @Bindable var queue = queue
+
         HStack(spacing: 12) {
             PresetPicker()
 
@@ -83,16 +87,19 @@ struct OptionsBar: View {
                 .frame(height: 24)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Target")
+                Text("Target: \(Int(queue.options.targetLUFS)) LUFS")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Picker("Target", selection: $queue.options.targetLUFS) {
-                    Text("-18 LUFS").tag(-18)
-                    Text("-16 LUFS").tag(-16)
-                }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .frame(width: 140)
+                Slider(value: $queue.options.targetLUFS, in: -24...(-14), step: 1)
+                    .frame(width: 140)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("True Peak: \(queue.options.truePeakString) dBTP")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Slider(value: $queue.options.truePeak, in: -3.0...(-0.1), step: 0.1)
+                    .frame(width: 120)
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -158,7 +165,7 @@ struct OptionsBar: View {
 }
 
 struct QueueListView: View {
-    @EnvironmentObject var queue: ProcessingQueue
+    @Environment(ProcessingQueue.self) var queue
 
     var body: some View {
         List {
@@ -175,5 +182,5 @@ struct QueueListView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(ProcessingQueue())
+        .environment(ProcessingQueue())
 }

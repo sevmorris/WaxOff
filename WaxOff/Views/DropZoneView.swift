@@ -2,7 +2,7 @@ import SwiftUI
 
 struct DropZoneView: View {
     @Binding var isTargeted: Bool
-    @EnvironmentObject var queue: ProcessingQueue
+    @Environment(ProcessingQueue.self) var queue
 
     var body: some View {
         ZStack {
@@ -43,6 +43,6 @@ struct DropZoneView: View {
 
 #Preview {
     DropZoneView(isTargeted: .constant(false))
-        .environmentObject(ProcessingQueue())
+        .environment(ProcessingQueue())
         .frame(width: 400, height: 200)
 }

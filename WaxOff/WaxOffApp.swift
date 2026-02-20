@@ -2,13 +2,13 @@ import SwiftUI
 
 @main
 struct WaxOffApp: App {
-    @StateObject private var processingQueue = ProcessingQueue()
+    @State private var processingQueue = ProcessingQueue()
     @Environment(\.openWindow) private var openWindow
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(processingQueue)
+                .environment(processingQueue)
                 .frame(minWidth: 600, minHeight: 450)
         }
         .windowResizability(.contentMinSize)
@@ -36,7 +36,7 @@ struct WaxOffApp: App {
 
         Settings {
             SettingsView()
-                .environmentObject(processingQueue)
+                .environment(processingQueue)
         }
     }
 }

@@ -7,7 +7,7 @@ enum OutputMode: String, Codable, CaseIterable {
 }
 
 struct ProcessingOptions: Codable, Equatable {
-    var targetLUFS: Int = -18
+    var targetLUFS: Double = -18
     var truePeak: Double = -1.0
     var lra: Double = 11.0
     var outputMode: OutputMode = .both
@@ -18,7 +18,7 @@ struct ProcessingOptions: Codable, Equatable {
     static let `default` = ProcessingOptions()
 
     var targetLUFSString: String {
-        "\(targetLUFS)"
+        targetLUFS == targetLUFS.rounded() ? "\(Int(targetLUFS))" : String(format: "%.1f", targetLUFS)
     }
 
     var truePeakString: String {

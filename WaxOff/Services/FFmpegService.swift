@@ -181,7 +181,7 @@ actor FFmpegService {
         if options.phaseRotationEnabled {
             filterChain = "allpass=f=150,"
         }
-        filterChain += "loudnorm=I=\(options.targetLUFS):TP=\(options.truePeakString):LRA=\(options.lraString):print_format=json"
+        filterChain += "loudnorm=I=\(options.targetLUFSString):TP=\(options.truePeakString):LRA=\(options.lraString):print_format=json"
 
         let args = [
             "-hide_banner",
@@ -214,7 +214,7 @@ actor FFmpegService {
         if options.phaseRotationEnabled {
             filterChain = "allpass=f=150,"
         }
-        filterChain += "loudnorm=I=\(options.targetLUFS):TP=\(options.truePeakString):LRA=\(options.lraString)"
+        filterChain += "loudnorm=I=\(options.targetLUFSString):TP=\(options.truePeakString):LRA=\(options.lraString)"
         filterChain += ":measured_I=\(measurements.inputI)"
         filterChain += ":measured_TP=\(measurements.inputTP)"
         filterChain += ":measured_LRA=\(measurements.inputLRA)"
@@ -258,7 +258,6 @@ actor FFmpegService {
             "-c:a", "libmp3lame",
             "-b:a", "\(options.mp3Bitrate)k",
             "-ar", String(options.sampleRate),
-            "-ac", "2",
             "-f", "mp3",
             output.path
         ]

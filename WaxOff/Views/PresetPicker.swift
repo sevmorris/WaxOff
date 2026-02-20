@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PresetPicker: View {
-    @EnvironmentObject var queue: ProcessingQueue
+    @Environment(ProcessingQueue.self) var queue
     @State private var showingSaveSheet = false
     @State private var newPresetName = ""
 
@@ -108,6 +108,6 @@ struct SavePresetSheet: View {
 
 #Preview {
     PresetPicker()
-        .environmentObject(ProcessingQueue())
+        .environment(ProcessingQueue())
         .padding()
 }

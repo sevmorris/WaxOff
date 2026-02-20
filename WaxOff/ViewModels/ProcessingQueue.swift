@@ -2,13 +2,14 @@ import Foundation
 import SwiftUI
 
 @MainActor
-final class ProcessingQueue: ObservableObject {
-    @Published var jobs: [ProcessingJob] = []
-    @Published var options = ProcessingOptions.default
-    @Published var isProcessing = false
-    @Published var processingComplete = false
+@Observable
+final class ProcessingQueue {
+    var jobs: [ProcessingJob] = []
+    var options = ProcessingOptions.default
+    var isProcessing = false
+    var processingComplete = false
 
-    @Published var presetStore = PresetStore()
+    var presetStore = PresetStore()
 
     private var processingTask: Task<Void, Never>?
 
@@ -61,7 +62,7 @@ final class ProcessingQueue: ObservableObject {
 
         LogService.shared.logRunStart()
         LogService.shared.log("Starting batch processing with \(pendingJobs.count) files")
-        LogService.shared.log("Options: Target=\(options.targetLUFS) LUFS, Output=\(options.outputMode.rawValue), MP3=\(options.mp3BitrateString), SR=\(options.sampleRate)")
+        LogService.shared.log("Options: Target=\(options.targetLUFSString) LUFS, Output=\(options.outputMode.rawValue), MP3=\(options.mp3BitrateString), SR=\(options.sampleRate)")
 
         processingTask = Task {
             await processAllJobs()
