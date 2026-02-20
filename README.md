@@ -9,6 +9,10 @@ WaxOff prepares your final podcast mix for distribution. It applies EBU R128 lou
 
 WaxOff assumes your mix is already balanced — it applies a single linear gain adjustment to hit the target loudness without changing dynamics, compression, or relative levels. If your mix sounds right, WaxOff just makes it loud enough.
 
+## Design Philosophy
+
+WaxOff is intentionally minimal. It does one thing — finalizes your podcast mix for distribution — and exposes only the controls that matter for that job. Sensible defaults handle the rest. Drop your mix in, hit Process, and upload.
+
 ## Download
 
 **[WaxOff v2.2 (DMG)](https://github.com/sevmorris/WaxOff/releases/latest/download/WaxOff-v2.2.dmg)**

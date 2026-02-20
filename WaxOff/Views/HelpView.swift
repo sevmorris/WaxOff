@@ -5,6 +5,14 @@ struct HelpView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 header
+                section("Design Philosophy") {
+                    text("""
+                    WaxOff is intentionally minimal. It does one thing — finalizes your \
+                    podcast mix for distribution — and exposes only the controls that \
+                    matter for that job. Sensible defaults handle the rest. Drop your \
+                    mix in, hit Process, and upload.
+                    """)
+                }
                 section("Getting Started") {
                     text("""
                     WaxOff is a finalizer for podcast mixes. It applies EBU R128 loudness \
