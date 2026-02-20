@@ -8,7 +8,7 @@ WaxOff assumes your mix is already balanced — it applies a single linear gain 
 
 ## Download
 
-**[WaxOff v2.1 (DMG)](https://github.com/sevmorris/WaxOff/releases/latest/download/WaxOff-v2.1.dmg)**
+**[WaxOff v2.2 (DMG)](https://github.com/sevmorris/WaxOff/releases/latest/download/WaxOff-v2.2.dmg)**
 
 **Note:** macOS may block the app on first launch with a malware warning. This is because the app is not notarized with Apple. To fix, run this after mounting the DMG and dragging WaxOff to Applications:
 
@@ -18,14 +18,15 @@ xattr -cr /Applications/WaxOff.app
 
 ## Features
 
-- **Loudness Normalization**: Two-pass EBU R128 with linear gain — no dynamic compression, just transparent level matching
-- **True Peak Limiting**: Configurable ceiling (-1.0, -1.5, or -2.0 dBTP) to prevent inter-sample clipping
+- **Loudness Normalization**: Two-pass EBU R128 with linear gain — no dynamic compression, just transparent level matching. Target adjustable from -24 to -14 LUFS.
+- **True Peak Limiting**: Configurable ceiling (-3.0 to -0.1 dBTP) to prevent inter-sample clipping
 - **Phase Rotation**: Optional 150 Hz allpass filter to reduce crest factor and improve headroom
-- **WAV + MP3 Output**: 24-bit WAV, CBR MP3 (128/160/192 kbps), or both
+- **WAV + MP3 Output**: 24-bit WAV, CBR MP3 (128/160/192 kbps), or both. MP3 preserves source channel count (mono/stereo).
 - **Sample Rate Conversion**: 44.1 kHz or 48 kHz output
 - **Presets**: Built-in presets for common podcast workflows, plus custom presets
 - **Drag & Drop**: Drop audio files onto the window to queue them
 - **Batch Processing**: Sequential queue with per-file progress and status
+- **File Selection**: Select and remove files from the queue before processing
 - **Processing Log**: Detailed log of all operations at ~/Library/Logs/WaxOff.log
 
 ## System Requirements

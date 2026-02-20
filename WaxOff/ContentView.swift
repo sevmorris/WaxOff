@@ -21,12 +21,20 @@ struct ContentView: View {
                 DropZoneView(isTargeted: $isTargeted)
             } else {
                 VStack(spacing: 0) {
-                    DropZoneView(isTargeted: $isTargeted)
-                        .frame(height: 120)
+                    QueueListView()
 
                     Divider()
 
-                    QueueListView()
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus.circle")
+                            .foregroundStyle(.tertiary)
+                        Text("Drop more files here")
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(isTargeted ? Color.accentColor.opacity(0.1) : Color.clear)
                 }
             }
         }
@@ -116,19 +124,19 @@ struct OptionsBar: View {
                 .frame(width: 140)
             }
 
-            if queue.options.outputMode != .wav {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("MP3")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Picker("Bitrate", selection: $queue.options.mp3Bitrate) {
-                        Text("128k").tag(128)
-                        Text("160k").tag(160)
-                        Text("192k").tag(192)
-                    }
-                    .labelsHidden()
-                    .frame(width: 75)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("MP3")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Picker("Bitrate", selection: $queue.options.mp3Bitrate) {
+                    Text("128k").tag(128)
+                    Text("160k").tag(160)
+                    Text("192k").tag(192)
                 }
+                .labelsHidden()
+                .frame(width: 75)
+                .disabled(queue.options.outputMode == .wav)
+                .opacity(queue.options.outputMode == .wav ? 0.4 : 1)
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -145,38 +153,66 @@ struct OptionsBar: View {
 
             Spacer()
 
-            if queue.isProcessing {
-                HStack(spacing: 8) {
-                    ProgressView()
-                        .scaleEffect(0.7)
-                    Text("Processing...")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            Group {
+                if queue.isProcessing {
+                    HStack(spacing: 8) {
+                        ProgressView()
+                            .scaleEffect(0.7)
+                        Text("Processing...")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                } else {
+                    Button("Process All") {
+                        queue.startProcessing()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .disabled(queue.jobs.isEmpty)
+                    .opacity(queue.jobs.isEmpty ? 0.4 : 1)
                 }
-            } else if !queue.jobs.isEmpty {
-                Button("Process All") {
-                    queue.startProcessing()
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
             }
+            .frame(width: 120)
         }
     }
 }
 
 struct QueueListView: View {
     @Environment(ProcessingQueue.self) var queue
+    @State private var selectedJobIDs: Set<UUID> = []
 
     var body: some View {
-        List {
-            ForEach(queue.jobs) { job in
-                QueueItemView(job: job)
+        VStack(spacing: 0) {
+            List(selection: $selectedJobIDs) {
+                ForEach(queue.jobs) { job in
+                    QueueItemView(job: job)
+                        .tag(job.id)
+                }
+                .onDelete { indexSet in
+                    queue.removeJobs(at: indexSet)
+                }
             }
-            .onDelete { indexSet in
-                queue.removeJobs(at: indexSet)
+            .listStyle(.inset)
+
+            if !selectedJobIDs.isEmpty {
+                Divider()
+                HStack {
+                    Text("\(selectedJobIDs.count) selected")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Remove Selected") {
+                        queue.removeJobs(withIDs: selectedJobIDs)
+                        selectedJobIDs.removeAll()
+                    }
+                    .buttonStyle(.borderless)
+                    .foregroundStyle(.red)
+                    .disabled(queue.isProcessing)
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 6)
             }
         }
-        .listStyle(.inset)
     }
 }
 

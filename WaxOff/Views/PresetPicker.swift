@@ -54,7 +54,7 @@ struct PresetPicker: View {
                 }
             }
             .menuStyle(.borderlessButton)
-            .fixedSize()
+            .frame(width: 160, alignment: .leading)
         }
         .sheet(isPresented: $showingSaveSheet) {
             SavePresetSheet(presetName: $newPresetName) {

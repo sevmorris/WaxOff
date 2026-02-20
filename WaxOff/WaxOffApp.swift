@@ -9,10 +9,10 @@ struct WaxOffApp: App {
         WindowGroup {
             ContentView()
                 .environment(processingQueue)
-                .frame(minWidth: 600, minHeight: 450)
+                .frame(minWidth: 960, minHeight: 450)
         }
         .windowResizability(.contentMinSize)
-        .defaultSize(width: 700, height: 500)
+        .defaultSize(width: 960, height: 500)
         .commands {
             CommandGroup(replacing: .newItem) { }
             CommandGroup(after: .appInfo) {

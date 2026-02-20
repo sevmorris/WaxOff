@@ -44,6 +44,10 @@ final class ProcessingQueue {
         jobs.remove(atOffsets: filteredOffsets)
     }
 
+    func removeJobs(withIDs ids: Set<UUID>) {
+        jobs.removeAll { ids.contains($0.id) && !$0.status.isActive }
+    }
+
     func clearCompleted() {
         jobs.removeAll { $0.status == .complete }
     }

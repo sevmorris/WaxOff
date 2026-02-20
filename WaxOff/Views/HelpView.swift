@@ -32,15 +32,23 @@ struct HelpView: View {
                     ])
                 }
                 section("Main Settings") {
-                    definition("Target Loudness", "Integrated loudness target: -18 LUFS (podcast standard) or -16 LUFS (louder). Normalization uses linear gain — no dynamic compression.")
-                    definition("Output Format", "WAV only (24-bit), MP3 only, or both. MP3 is CBR at the selected bitrate.")
+                    definition("Target Loudness", "Integrated loudness target, adjustable from -24 to -14 LUFS. Common targets: -18 LUFS (podcast standard), -16 LUFS (louder), -14 LUFS (Spotify/YouTube). Normalization uses linear gain — no dynamic compression.")
+                    definition("True Peak Limit", "Maximum true peak level, adjustable from -3.0 to -0.1 dBTP. Prevents inter-sample clipping on playback. -1.0 dBTP is recommended for most podcasts.")
+                    definition("Output Format", "WAV only (24-bit), MP3 only, or both. MP3 is CBR at the selected bitrate and preserves the source channel count (mono or stereo).")
                     definition("MP3 Bitrate", "128, 160 (recommended), or 192 kbps constant bitrate.")
                     definition("Sample Rate", "Output sample rate — 44.1 kHz or 48 kHz.")
                 }
                 section("Advanced Settings (Settings Window)") {
-                    definition("True Peak Limit", "Maximum true peak level: -1.0, -1.5, or -2.0 dBTP. Prevents inter-sample clipping on playback.")
                     definition("Phase Rotation", "150 Hz allpass filter applied before normalization. Reduces crest factor of speech, giving the normalizer more headroom.")
                     definition("Loudness Range (LRA)", "Target loudness range, fixed at 11 LU. Controls how much dynamic variation is permitted.")
+                }
+                section("File Management") {
+                    text("""
+                    Click files in the queue to select them. Use Shift-click or Command-click \
+                    to select multiple files. Selected files can be removed with the Remove \
+                    Selected button. You can also swipe left on individual files to delete them. \
+                    Files that are actively processing cannot be removed.
+                    """)
                 }
                 section("Presets") {
                     text("WaxOff includes built-in presets for common podcast workflows:")
