@@ -61,7 +61,7 @@ struct HelpView: View {
                 section("Presets") {
                     text("WaxOff includes built-in presets for common podcast workflows:")
                     definition("Podcast Standard", "-18 LUFS, both WAV + MP3, 160 kbps, 44.1 kHz, phase rotation on.")
-                    definition("Podcast Loud", "-16 LUFS, both WAV + MP3, 192 kbps, 44.1 kHz, phase rotation on.")
+                    definition("Podcast Loud", "-16 LUFS, both WAV + MP3, 160 kbps, 44.1 kHz, phase rotation on.")
                     definition("WAV Only (Mastering)", "-18 LUFS, WAV only, 48 kHz, phase rotation on.")
                     text("You can also save your own presets from the preset menu in the toolbar.")
                 }

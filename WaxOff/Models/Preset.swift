@@ -33,7 +33,7 @@ struct Preset: Identifiable, Codable, Equatable {
                 truePeak: -1.0,
                 lra: 11.0,
                 outputMode: .both,
-                mp3Bitrate: 192,
+                mp3Bitrate: 160,
                 sampleRate: 44100,
                 phaseRotationEnabled: true
             )

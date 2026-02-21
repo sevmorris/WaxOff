@@ -66,7 +66,7 @@ Example: `episode-01-lev--18LUFS.wav`
 | Preset | Target | Output | MP3 | Sample Rate | Phase Rotation |
 |--------|--------|--------|-----|-------------|----------------|
 | Podcast Standard | -18 LUFS | Both | 160 kbps | 44.1 kHz | On |
-| Podcast Loud | -16 LUFS | Both | 192 kbps | 44.1 kHz | On |
+| Podcast Loud | -16 LUFS | Both | 160 kbps | 44.1 kHz | On |
 | WAV Only (Mastering) | -18 LUFS | WAV | — | 48 kHz | On |
 
 ## Processing Pipeline
