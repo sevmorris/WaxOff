@@ -21,6 +21,8 @@
 		A10000120000000000000012 /* FFmpegService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000120000000000000012 /* FFmpegService.swift */; };
 		A10000130000000000000013 /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000130000000000000013 /* LogService.swift */; };
 		A10000150000000000000015 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000150000000000000015 /* HelpView.swift */; };
+		A10000160000000000000016 /* ffmpeg in Resources */ = {isa = PBXBuildFile; fileRef = A20000160000000000000016 /* ffmpeg */; };
+		A10000170000000000000017 /* ffprobe in Resources */ = {isa = PBXBuildFile; fileRef = A20000170000000000000017 /* ffprobe */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		A20000120000000000000012 /* FFmpegService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFmpegService.swift; sourceTree = "<group>"; };
 		A20000130000000000000013 /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		A20000140000000000000014 /* WaxOff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WaxOff.entitlements; sourceTree = "<group>"; };
+		A20000160000000000000016 /* ffmpeg */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = ffmpeg; sourceTree = "<group>"; };
+		A20000170000000000000017 /* ffprobe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = ffprobe; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +77,8 @@
 				A40000070000000000000007 /* Resources */,
 				A20000030000000000000003 /* Assets.xcassets */,
 				A20000140000000000000014 /* WaxOff.entitlements */,
+				A20000160000000000000016 /* ffmpeg */,
+				A20000170000000000000017 /* ffprobe */,
 			);
 			path = WaxOff;
 			sourceTree = "<group>";
@@ -190,6 +196,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000030000000000000003 /* Assets.xcassets in Resources */,
+				A10000160000000000000016 /* ffmpeg in Resources */,
+				A10000170000000000000017 /* ffprobe in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

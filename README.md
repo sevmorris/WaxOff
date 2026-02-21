@@ -43,7 +43,7 @@ WaxOff is intentionally minimal. It does one thing — finalizes your podcast mi
 ## System Requirements
 
 - macOS 14.0 (Sonoma) or later
-- FFmpeg (installed via Homebrew)
+- FFmpeg (bundled or installed via Homebrew)
 
 ## Usage
 

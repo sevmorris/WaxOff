@@ -38,12 +38,28 @@ actor FFmpegService {
     }
 
     private nonisolated static func findFFmpegSync() -> String? {
-        if let bundledPath = Bundle.main.path(forResource: "ffmpeg", ofType: nil) {
-            if FileManager.default.isExecutableFile(atPath: bundledPath) {
-                return bundledPath
+        let fm = FileManager.default
+
+        // 1. Check app bundle (bundled binary)
+        if let bundledPath = Bundle.main.path(forResource: "ffmpeg", ofType: nil),
+           fm.isExecutableFile(atPath: bundledPath) {
+            return bundledPath
+        }
+
+        // 2. Check bundle resources directory
+        if let resourceURL = Bundle.main.resourceURL {
+            let bundledURL = resourceURL.appendingPathComponent("ffmpeg")
+            if fm.isExecutableFile(atPath: bundledURL.path) {
+                return bundledURL.path
             }
         }
 
+        // 3. Try copying from bundle to temp (handles sandboxing/permission issues)
+        if let tempPath = try? copyBundledToTemp() {
+            return tempPath
+        }
+
+        // 4. Fall back to system paths
         let searchPaths = [
             "/opt/homebrew/bin/ffmpeg",
             "/usr/local/bin/ffmpeg",
@@ -51,7 +67,7 @@ actor FFmpegService {
         ]
 
         for path in searchPaths {
-            if FileManager.default.isExecutableFile(atPath: path) {
+            if fm.isExecutableFile(atPath: path) {
                 return path
             }
         }
@@ -61,6 +77,38 @@ actor FFmpegService {
         }
 
         return nil
+    }
+
+    private nonisolated static func copyBundledToTemp() throws -> String {
+        let fm = FileManager.default
+        let tempBase = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+            .appendingPathComponent("WaxOff/bin", isDirectory: true)
+
+        try fm.createDirectory(at: tempBase, withIntermediateDirectories: true)
+
+        let ffmpegDst = tempBase.appendingPathComponent("ffmpeg")
+
+        if fm.isExecutableFile(atPath: ffmpegDst.path) {
+            return ffmpegDst.path
+        }
+
+        guard let sourceURL = Bundle.main.url(forResource: "ffmpeg", withExtension: nil) ??
+              Bundle.main.resourceURL?.appendingPathComponent("ffmpeg"),
+              fm.fileExists(atPath: sourceURL.path) else {
+            throw FFmpegError.notFound
+        }
+
+        if fm.fileExists(atPath: ffmpegDst.path) {
+            try? fm.removeItem(at: ffmpegDst)
+        }
+
+        try fm.copyItem(at: sourceURL, to: ffmpegDst)
+
+        var attributes = try fm.attributesOfItem(atPath: ffmpegDst.path)
+        attributes[.posixPermissions] = NSNumber(value: 0o755)
+        try fm.setAttributes(attributes, ofItemAtPath: ffmpegDst.path)
+
+        return ffmpegDst.path
     }
 
     private nonisolated static func runWhichSync(_ command: String) -> String? {
