@@ -99,7 +99,7 @@ final class ProcessingQueue {
         job.progress = 0
 
         do {
-            let outputURLs = try await FFmpegService.shared.process(
+            let outputURLs = try await FFmpegManager.shared.process(
                 job: job,
                 options: options
             ) { [weak self] progress in

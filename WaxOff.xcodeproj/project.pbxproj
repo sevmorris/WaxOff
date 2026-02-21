@@ -18,7 +18,7 @@
 		A10000090000000000000009 /* QueueItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000090000000000000009 /* QueueItemView.swift */; };
 		A10000100000000000000010 /* PresetPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000100000000000000010 /* PresetPicker.swift */; };
 		A10000110000000000000011 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000110000000000000011 /* SettingsView.swift */; };
-		A10000120000000000000012 /* FFmpegService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000120000000000000012 /* FFmpegService.swift */; };
+		A10000120000000000000012 /* FFmpegManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000120000000000000012 /* FFmpegManager.swift */; };
 		A10000130000000000000013 /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000130000000000000013 /* LogService.swift */; };
 		A10000150000000000000015 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000150000000000000015 /* HelpView.swift */; };
 		A10000160000000000000016 /* ffmpeg in Resources */ = {isa = PBXBuildFile; fileRef = A20000160000000000000016 /* ffmpeg */; };
@@ -39,7 +39,7 @@
 		A20000100000000000000010 /* PresetPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetPicker.swift; sourceTree = "<group>"; };
 		A20000110000000000000011 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A20000150000000000000015 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
-		A20000120000000000000012 /* FFmpegService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFmpegService.swift; sourceTree = "<group>"; };
+		A20000120000000000000012 /* FFmpegManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFmpegManager.swift; sourceTree = "<group>"; };
 		A20000130000000000000013 /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		A20000140000000000000014 /* WaxOff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WaxOff.entitlements; sourceTree = "<group>"; };
 		A20000160000000000000016 /* ffmpeg */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = ffmpeg; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 		A40000060000000000000006 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				A20000120000000000000012 /* FFmpegService.swift */,
+				A20000120000000000000012 /* FFmpegManager.swift */,
 				A20000130000000000000013 /* LogService.swift */,
 			);
 			path = Services;
@@ -219,7 +219,7 @@
 				A10000100000000000000010 /* PresetPicker.swift in Sources */,
 				A10000110000000000000011 /* SettingsView.swift in Sources */,
 				A10000150000000000000015 /* HelpView.swift in Sources */,
-				A10000120000000000000012 /* FFmpegService.swift in Sources */,
+				A10000120000000000000012 /* FFmpegManager.swift in Sources */,
 				A10000130000000000000013 /* LogService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,17 +355,16 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Seven Morris — 7morris@gmail.com\nLicensed under GPL-3.0";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Seven Morris\nLicensed under GPL-3.0";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 2.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.waxoff.app;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.sevmorris.WaxOff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -382,17 +381,16 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Seven Morris — 7morris@gmail.com\nLicensed under GPL-3.0";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Seven Morris\nLicensed under GPL-3.0";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 2.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.waxoff.app;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.sevmorris.WaxOff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

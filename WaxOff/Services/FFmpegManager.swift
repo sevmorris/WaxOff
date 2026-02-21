@@ -28,8 +28,8 @@ struct FFmpegProgress {
     var progress: Double
 }
 
-actor FFmpegService {
-    static let shared = FFmpegService()
+actor FFmpegManager {
+    static let shared = FFmpegManager()
 
     private var ffmpegPath: String?
 

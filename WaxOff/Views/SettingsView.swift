@@ -100,7 +100,7 @@ struct FFmpegStatusRow: View {
         }
         .task {
             do {
-                ffmpegPath = try await FFmpegService.shared.getFFmpegPath()
+                ffmpegPath = try await FFmpegManager.shared.getFFmpegPath()
             } catch {
                 ffmpegPath = nil
             }
