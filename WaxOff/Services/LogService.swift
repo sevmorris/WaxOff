@@ -23,6 +23,9 @@ final class LogService {
         if !FileManager.default.fileExists(atPath: logURL.path) {
             FileManager.default.createFile(atPath: logURL.path, contents: nil)
         }
+
+        fileHandle = try? FileHandle(forWritingTo: logURL)
+        fileHandle?.seekToEndOfFile()
     }
 
     func log(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
@@ -31,14 +34,8 @@ final class LogService {
         let logEntry = "[\(timestamp)] [\(filename):\(line)] \(message)\n"
 
         queue.async { [weak self] in
-            guard let self = self else { return }
-            if let data = logEntry.data(using: .utf8) {
-                if let handle = try? FileHandle(forWritingTo: self.logURL) {
-                    handle.seekToEndOfFile()
-                    handle.write(data)
-                    try? handle.close()
-                }
-            }
+            guard let self, let data = logEntry.data(using: .utf8) else { return }
+            self.fileHandle?.write(data)
         }
 
         #if DEBUG

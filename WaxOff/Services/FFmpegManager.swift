@@ -72,10 +72,6 @@ actor FFmpegManager {
             }
         }
 
-        if let path = runWhichSync("ffmpeg") {
-            return path
-        }
-
         return nil
     }
 
@@ -134,11 +130,23 @@ actor FFmpegManager {
         return nil
     }
 
-    func getFFmpegPath() throws -> String {
-        guard let path = ffmpegPath else {
-            throw FFmpegError.notFound
+    func getFFmpegPath() async throws -> String {
+        if let path = ffmpegPath {
+            return path
         }
-        return path
+        if let path = await findFFmpegWhich() {
+            ffmpegPath = path
+            return path
+        }
+        throw FFmpegError.notFound
+    }
+
+    private func findFFmpegWhich() async -> String? {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .utility).async {
+                continuation.resume(returning: Self.runWhichSync("ffmpeg"))
+            }
+        }
     }
 
     func process(
@@ -146,7 +154,7 @@ actor FFmpegManager {
         options: ProcessingOptions,
         progressHandler: @escaping (FFmpegProgress) -> Void
     ) async throws -> [URL] {
-        let ffmpeg = try getFFmpegPath()
+        let ffmpeg = try await getFFmpegPath()
         var outputURLs: [URL] = []
 
         LogService.shared.log("Processing: \(job.filename)")
@@ -179,6 +187,7 @@ actor FFmpegManager {
         }
 
         if options.outputMode == .wav || options.outputMode == .both {
+            try? FileManager.default.removeItem(at: wavFinalURL)
             try FileManager.default.moveItem(at: wavTempURL, to: wavFinalURL)
             outputURLs.append(wavFinalURL)
             LogService.shared.log("Created WAV: \(wavFinalURL.lastPathComponent)")
@@ -190,6 +199,15 @@ actor FFmpegManager {
             let sourceForMP3 = options.outputMode == .both ? wavFinalURL : wavTempURL
             let mp3TempURL = outputDir.appendingPathComponent(".\(outputStem).part.\(UUID().uuidString.prefix(8)).mp3")
             let mp3FinalURL = outputDir.appendingPathComponent("\(outputStem).mp3")
+
+            defer {
+                // Clean up temp WAV in MP3-only mode whether encoding succeeds or fails
+                if options.outputMode == .mp3 {
+                    try? FileManager.default.removeItem(at: wavTempURL)
+                }
+                // Clean up temp MP3 if it still exists (already moved on success, no-op otherwise)
+                try? FileManager.default.removeItem(at: mp3TempURL)
+            }
 
             try await encodeMP3(
                 ffmpeg: ffmpeg,
@@ -204,13 +222,10 @@ actor FFmpegManager {
                 throw FFmpegError.encodingFailed("MP3 file was not created")
             }
 
+            try? FileManager.default.removeItem(at: mp3FinalURL)
             try FileManager.default.moveItem(at: mp3TempURL, to: mp3FinalURL)
             outputURLs.append(mp3FinalURL)
             LogService.shared.log("Created MP3: \(mp3FinalURL.lastPathComponent)")
-
-            if options.outputMode == .mp3 {
-                try? FileManager.default.removeItem(at: wavTempURL)
-            }
         }
 
         progressHandler(FFmpegProgress(phase: "Verifying", progress: 0.95))
@@ -320,37 +335,69 @@ actor FFmpegManager {
     }
 
     private nonisolated func runFFmpeg(path: String, arguments: [String]) async throws -> (Int32, String) {
-        return try await withCheckedThrowingContinuation { continuation in
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: path)
-            process.arguments = arguments
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: path)
+        process.arguments = arguments
 
-            let stderrPipe = Pipe()
-            process.standardOutput = FileHandle.nullDevice
-            process.standardError = stderrPipe
+        let stderrPipe = Pipe()
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = stderrPipe
 
-            process.terminationHandler = { proc in
-                let stderrData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
-                let stderrString = String(data: stderrData, encoding: .utf8) ?? ""
-                continuation.resume(returning: (proc.terminationStatus, stderrString))
+        // Box avoids a shared `var` across two closures, satisfying Swift 6 concurrency.
+        // readGroup.wait() in the terminationHandler ensures the write always precedes the read.
+        final class DataBox: @unchecked Sendable { var value = Data() }
+        let box = DataBox()
+
+        return try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { continuation in
+                let readGroup = DispatchGroup()
+                readGroup.enter()
+                DispatchQueue.global(qos: .utility).async {
+                    box.value = stderrPipe.fileHandleForReading.readDataToEndOfFile()
+                    readGroup.leave()
+                }
+
+                process.terminationHandler = { proc in
+                    readGroup.wait()
+                    if proc.terminationReason == .uncaughtSignal {
+                        continuation.resume(throwing: CancellationError())
+                        return
+                    }
+                    let stderrString = String(data: box.value, encoding: .utf8) ?? ""
+                    continuation.resume(returning: (proc.terminationStatus, stderrString))
+                }
+
+                do {
+                    try process.run()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
-
-            do {
-                try process.run()
-            } catch {
-                continuation.resume(throwing: error)
-            }
+        } onCancel: {
+            process.terminate()
         }
     }
 
     private nonisolated func parseLoudnormJSON(from stderr: String) -> LoudnormMeasurements? {
-        guard let jsonStart = stderr.range(of: "{", options: .backwards),
-              let jsonEnd = stderr.range(of: "}", options: .backwards) else {
+        guard let braceRange = stderr.range(of: "{", options: .backwards) else {
             return nil
         }
 
-        let jsonString = String(stderr[jsonStart.lowerBound...jsonEnd.upperBound])
+        var depth = 0
+        var jsonEnd: String.Index?
+        outer: for idx in stderr[braceRange.lowerBound...].indices {
+            switch stderr[idx] {
+            case "{": depth += 1
+            case "}":
+                depth -= 1
+                if depth == 0 { jsonEnd = idx; break outer }
+            default: break
+            }
+        }
 
+        guard let jsonEnd else { return nil }
+
+        let jsonString = String(stderr[braceRange.lowerBound...jsonEnd])
         guard let data = jsonString.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return nil
