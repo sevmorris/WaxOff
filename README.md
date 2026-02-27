@@ -10,7 +10,7 @@ WaxOff is intentionally minimal. It does one thing — finalizes your podcast mi
 
 ## Download
 
-**[WaxOff v2.4 (DMG)](https://github.com/sevmorris/WaxOff/releases/latest/download/WaxOff-v2.4.dmg)**
+**[WaxOff v2.6 (DMG)](https://github.com/sevmorris/WaxOff/releases/latest/download/WaxOff-v2.6.dmg)**
 
 > ⚠️ **Important — Read Before First Launch**
 >
