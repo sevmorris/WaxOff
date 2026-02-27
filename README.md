@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/header.png" alt="WaxOff">
+</p>
+
 **Podcast Finalizer for macOS**
 
 WaxOff prepares your final podcast mix for distribution. It applies EBU R128 loudness normalization, optional phase rotation, and encodes to 24-bit WAV and/or MP3 — ready for upload.
