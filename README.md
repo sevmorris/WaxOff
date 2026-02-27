@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/header.png" alt="WaxOff">
+  <img src="assets/waxoff_banner.png" alt="WaxOff">
 </p>
 
 **Podcast Finalizer for macOS**
